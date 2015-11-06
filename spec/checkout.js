@@ -27,7 +27,10 @@ const checkout = {
     country: 'GB'
   },
   payment: {
-
+    card_number: '4242424242424242',
+    csc: '123',
+    expiry_month: 8,
+    expiry_year: 2016
   },
   basket: {
     id: 'WEB123456',
@@ -75,7 +78,7 @@ const performCheckout = () => {
 
 describe('/checkouts', () => {
   describe('post', () => {
-    it('returns a 201 response on success', () => {
+    it.only('returns a 201 response on success', () => {
       return performCheckout()
         .then(response => {
           expect(response.statusCode).to.equal(201);
