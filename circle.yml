@@ -15,3 +15,15 @@ dependencies:
 test:
   override:
     - docker run -w "/src" checkout-api bash -c "npm run ci";
+
+deployment:
+  dev:
+    branch: master
+    commands:
+      - echo "production = true" > .npmrc
+      - scripts/rolling_deploy.sh checkout-api app=checkout-api development ${PWD} ${PWD}/kubernetes/rc.json
+  prod:
+    branch: production
+    commands:
+      - echo "production = true" > .npmrc
+      - scripts/rolling_deploy.sh checkout-api app=checkout-api production ${PWD} ${PWD}/kubernetes/rc.json
