@@ -6,11 +6,33 @@ const expect = require('chai').expect;
 const server = require('../lib/server');
 
 const checkout = {
-  line_items: [
-    {product_id: 'a', quantity: 1},
-    {product_id: 'b', quantity: 4},
-    {product_id: 'c', quantity: 1}
-  ]
+  basket: {
+    id: 'WEB123456',
+    currency: 'GBP',
+    subtotal: 123.00,
+    tax: 10.00,
+    total: 130.00,
+    line_item_count: 1,
+    order_forms: [
+      {
+        supplier: 'Pub Taverns',
+        line_items: [
+          {
+            product: {
+              url: 'http://www.example.com/product?=ABC123',
+              name: 'ABC Trainers',
+              price: 25.00,
+              was_price: 30.00
+            },
+            quantity: 1,
+            subtotal: 25.00
+          }
+        ],
+        line_item_count: 1,
+        subtotal: 25.00
+      }
+    ]
+  }
 };
 
 const performCheckout = () => {
