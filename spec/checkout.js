@@ -76,62 +76,58 @@ const performCheckout = () => {
   });
 };
 
-describe('/checkouts', () => {
+describe('/checkouts', function () {
+  this.timeout(5000);
+
+  let checkoutResponse;
+
+  before(() => {
+    return performCheckout()
+      .then(response => {
+        checkoutResponse = response;
+      });
+  });
+
   describe('post', () => {
-    it.only('returns a 201 response on success', () => {
-      return performCheckout()
-        .then(response => {
-          expect(response.statusCode).to.equal(201);
-        });
+    it('returns a 201 response on success', () => {
+      expect(checkoutResponse.statusCode).to.equal(201);
     });
 
     it('returns the checkout location header', () => {
-      return performCheckout()
-        .then(response => {
-          expect(response.headers.location).to.equal(`/checkouts/${response.result.id}`);
-        });
+      expect(checkoutResponse.headers.location).to.equal(`/checkouts/${checkoutResponse.result.id}`);
     });
 
     it('returns a url for the created order', () => {
-      return performCheckout()
-        .then(response => {
-          const orderLink = _.find(response.result.links, {rel: 'order'});
-
-          expect(orderLink).to.exist;
-          expect(orderLink.href).to.match(/^\/orders\/.*/);
-        });
+      const orderLink = _.find(checkoutResponse.result.links, {rel: 'order'});
+      expect(orderLink).to.exist;
+      expect(orderLink.href).to.match(/^\/orders\/.*/);
     });
 
     it('returns the checkout resource', () => {
-      return performCheckout()
-        .then(response => {
-          _.forOwn(checkout, (value, key) => {
-            expect(response.result).to.have.property(key);
-            expect(response.result[key]).to.deep.equal(value);
-          });
-        });
+      _.forOwn(checkout, (value, key) => {
+        expect(checkoutResponse.result).to.have.property(key);
+        expect(checkoutResponse.result[key]).to.deep.equal(value);
+      });
     });
   });
 
   describe('get', () => {
     it('returns the checkout resource', () => {
-      return performCheckout()
-        .then(checkoutResponse => {
-          expect(checkoutResponse.statusCode).to.equal(201);
-          return new Promise(resolve => {
-            checkoutResponse.request.server.inject({url: checkoutResponse.headers.location, method: 'GET'}, response => {
-              return resolve(response);
-            });
-          });
-        })
-        .then(response => {
-          expect(response.statusCode).to.equal(200);
+      expect(checkoutResponse.statusCode).to.equal(201);
 
-          _.forOwn(checkout, (value, key) => {
-            expect(response.result).to.have.property(key);
-            expect(response.result[key]).to.deep.equal(value);
-          });
+      return new Promise(resolve => {
+        checkoutResponse.request.server.inject({url: checkoutResponse.headers.location, method: 'GET'}, response => {
+          return resolve(response);
         });
+      })
+      .then(response => {
+        expect(response.statusCode).to.equal(200);
+
+        _.forOwn(checkout, (value, key) => {
+          expect(response.result).to.have.property(key);
+          expect(response.result[key]).to.deep.equal(value);
+        });
+      });
     });
 
     it('returns a 404 for a non existant checkout', done => {
