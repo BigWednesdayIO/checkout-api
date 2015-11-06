@@ -22,7 +22,9 @@
   },
   "homepage": "https://github.com/BigWednesdayIO/checkout-api#readme",
   "dependencies": {
-    "hapi": "^11.1.0"
+    "boom": "^3.0.0",
+    "hapi": "^11.1.0",
+    "lodash": "^3.10.1"
   },
   "devDependencies": {
     "babel-eslint": "^4.1.4",
@@ -37,7 +39,6 @@
     "grunt-mocha-test": "^0.12.7",
     "grunt-retire": "^0.3.10",
     "load-grunt-tasks": "^3.3.0",
-    "lodash": "^3.10.1",
     "mocha": "^2.3.3"
   }
 }

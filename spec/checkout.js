@@ -27,38 +27,75 @@ const performCheckout = () => {
   });
 };
 
-describe('Checkout', () => {
-  it('returns a 201 response on success', () => {
-    return performCheckout()
-      .then(response => {
-        expect(response.statusCode).to.equal(201);
-      });
+describe('/checkouts', () => {
+  describe('post', () => {
+    it('returns a 201 response on success', () => {
+      return performCheckout()
+        .then(response => {
+          expect(response.statusCode).to.equal(201);
+        });
+    });
+
+    it('returns the checkout location header', () => {
+      return performCheckout()
+        .then(response => {
+          expect(response.headers.location).to.equal(`/checkouts/${response.result.id}`);
+        });
+    });
+
+    it('returns a url for the created order', () => {
+      return performCheckout()
+        .then(response => {
+          const orderLink = _.find(response.result.links, {rel: 'order'});
+
+          expect(orderLink).to.exist;
+          expect(orderLink.href).to.match(/^\/orders\/.*/);
+        });
+    });
+
+    it('returns the checkout resource', () => {
+      return performCheckout()
+        .then(response => {
+          _.forOwn(checkout, (value, key) => {
+            expect(response.result).to.have.property(key);
+            expect(response.result[key]).to.deep.equal(value);
+          });
+        });
+    });
   });
 
-  it('returns the checkout location header', () => {
-    return performCheckout()
-      .then(response => {
-        expect(response.headers.location).to.equal(`/checkouts/${response.result.id}`);
-      });
-  });
+  describe('get', () => {
+    it('returns the checkout resource', () => {
+      return performCheckout()
+        .then(checkoutResponse => {
+          expect(checkoutResponse.statusCode).to.equal(201);
+          return new Promise(resolve => {
+            checkoutResponse.request.server.inject({url: checkoutResponse.headers.location, method: 'GET'}, response => {
+              return resolve(response);
+            });
+          });
+        })
+        .then(response => {
+          expect(response.statusCode).to.equal(200);
 
-  it('returns a url for the created order', () => {
-    return performCheckout()
-      .then(response => {
-        const orderLink = _.find(response.result.links, {rel: 'order'});
+          _.forOwn(checkout, (value, key) => {
+            expect(response.result).to.have.property(key);
+            expect(response.result[key]).to.deep.equal(value);
+          });
+        });
+    });
 
-        expect(orderLink).to.exist;
-        expect(orderLink.href).to.match(/^\/orders\/.*/);
-      });
-  });
+    it('returns a 404 for a non existant checkout', done => {
+      server((err, server) => {
+        if (err) {
+          return done(err);
+        }
 
-  it('returns the checkout resource', () => {
-    return performCheckout()
-      .then(response => {
-        _.forOwn(checkout, (value, key) => {
-          expect(response.result).to.have.property(key);
-          expect(response.result[key]).to.deep.equal(value);
+        server.inject({url: '/checkouts/1234', method: 'GET'}, response => {
+          expect(response.statusCode).to.equal(404);
+          done();
         });
       });
+    });
   });
 });
