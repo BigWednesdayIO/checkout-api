@@ -6,6 +6,26 @@ const expect = require('chai').expect;
 const server = require('../lib/server');
 
 const checkout = {
+  delivery_address: {
+    name: "Full Name",
+    line_1: "234 High Street",
+    line_2: null,
+    line_3: null,
+    city: "London",
+    region: "London",
+    postcode: "SW1 1AB",
+    country: "GB"
+  },​
+  billing_address: {
+    name: "Full Name",
+    line_1: "234 High Street",
+    line_2: null,
+    line_3: null,
+    city: "London",
+    region: "London",
+    postcode: "SW1 1AB",
+    country: "GB"
+  },
   basket: {
     id: 'WEB123456',
     currency: 'GBP',
