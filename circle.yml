@@ -1,0 +1,29 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  cache_directories:
+    - '~/docker'
+  override:
+    - if [[ -e ~/docker/node.tar ]]; then docker load -i ~/docker/node.tar; fi
+    - docker pull node:4.2.2
+    - mkdir -p ~/docker
+    - docker save node:4.2.2 > ~/docker/node.tar
+    - docker build -t checkout-api .
+
+test:
+  override:
+    - docker run -w "/src" checkout-api bash -c "npm run ci";
+
+deployment:
+  dev:
+    branch: master
+    commands:
+      - echo "production = true" > .npmrc
+      - scripts/rolling_deploy.sh checkout-api app=checkout-api development ${PWD} ${PWD}/kubernetes/rc.json
+  prod:
+    branch: production
+    commands:
+      - echo "production = true" > .npmrc
+      - scripts/rolling_deploy.sh checkout-api app=checkout-api production ${PWD} ${PWD}/kubernetes/rc.json
