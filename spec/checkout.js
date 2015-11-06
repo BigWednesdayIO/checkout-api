@@ -5,7 +5,7 @@ const _ = require('lodash');
 const expect = require('chai').expect;
 const server = require('../lib/server');
 
-const basket = {
+const checkout = {
   line_items: [
     {product_id: 'a', quantity: 1},
     {product_id: 'b', quantity: 4},
@@ -20,7 +20,7 @@ const performCheckout = () => {
         return reject(err);
       }
 
-      server.inject({url: '/checkouts', method: 'POST', payload: {basket}}, response => {
+      server.inject({url: '/checkouts', method: 'POST', payload: checkout}, response => {
         return resolve(response);
       });
     });
@@ -52,10 +52,13 @@ describe('Checkout', () => {
       });
   });
 
-  it('returns the checked out line items', () => {
-    return performCheckout(basket)
+  it('returns the checkout resource', () => {
+    return performCheckout()
       .then(response => {
-        expect(response.result.line_items).to.deep.equal(basket.line_items);
+        _.forOwn(checkout, (value, key) => {
+          expect(response.result).to.have.property(key);
+          expect(response.result[key]).to.deep.equal(value);
+        });
       });
   });
 });
