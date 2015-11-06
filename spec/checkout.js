@@ -7,24 +7,27 @@ const server = require('../lib/server');
 
 const checkout = {
   delivery_address: {
-    name: "Full Name",
-    line_1: "234 High Street",
+    name: 'Full Name',
+    line_1: '234 High Street',
     line_2: null,
     line_3: null,
-    city: "London",
-    region: "London",
-    postcode: "SW1 1AB",
-    country: "GB"
-  },​
+    city: 'London',
+    region: 'London',
+    postcode: 'SW1 1AB',
+    country: 'GB'
+  },
   billing_address: {
-    name: "Full Name",
-    line_1: "234 High Street",
+    name: 'Full Name',
+    line_1: '234 High Street',
     line_2: null,
     line_3: null,
-    city: "London",
-    region: "London",
-    postcode: "SW1 1AB",
-    country: "GB"
+    city: 'London',
+    region: 'London',
+    postcode: 'SW1 1AB',
+    country: 'GB'
+  },
+  payment: {
+
   },
   basket: {
     id: 'WEB123456',
@@ -49,7 +52,8 @@ const checkout = {
           }
         ],
         line_item_count: 1,
-        subtotal: 25.00
+        subtotal: 25.00,
+        delivery_method: 'Standard'
       }
     ]
   }
