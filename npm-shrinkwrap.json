@@ -14,6 +14,28 @@
         }
       }
     },
+    "cuid": {
+      "version": "1.3.8",
+      "from": "cuid@*",
+      "resolved": "https://registry.npmjs.org/cuid/-/cuid-1.3.8.tgz",
+      "dependencies": {
+        "browser-fingerprint": {
+          "version": "0.0.1",
+          "from": "browser-fingerprint@0.0.1",
+          "resolved": "https://registry.npmjs.org/browser-fingerprint/-/browser-fingerprint-0.0.1.tgz"
+        },
+        "core-js": {
+          "version": "1.2.5",
+          "from": "core-js@>=1.1.1 <2.0.0",
+          "resolved": "https://registry.npmjs.org/core-js/-/core-js-1.2.5.tgz"
+        },
+        "node-fingerprint": {
+          "version": "0.0.2",
+          "from": "node-fingerprint@0.0.2",
+          "resolved": "https://registry.npmjs.org/node-fingerprint/-/node-fingerprint-0.0.2.tgz"
+        }
+      }
+    },
     "hapi": {
       "version": "11.1.0",
       "from": "hapi@*",
