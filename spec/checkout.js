@@ -35,8 +35,7 @@ const checkout = {
   basket: {
     id: 'WEB123456',
     currency: 'GBP',
-    subtotal: 123.00,
-    tax: 10.00,
+    subtotal: 130.00,
     total: 130.00,
     line_item_count: 1,
     order_forms: [
@@ -47,15 +46,33 @@ const checkout = {
             product: {
               url: 'http://www.example.com/product?=ABC123',
               name: 'ABC Trainers',
-              price: 25.00,
-              was_price: 30.00
+              price: 50.00,
+              was_price: null
             },
-            quantity: 1,
-            subtotal: 25.00
+            quantity: 2,
+            subtotal: 100.00
           }
         ],
         line_item_count: 1,
-        subtotal: 25.00,
+        subtotal: 100.00,
+        delivery_method: 'Standard'
+      },
+      {
+        supplier: 'Beer & Wine Co',
+        line_items: [
+          {
+            product: {
+              url: 'http://www.example.com/product?=ABC123',
+              name: 'ABC Trainers',
+              price: 30.00,
+              was_price: 40.00
+            },
+            quantity: 1,
+            subtotal: 30.00
+          }
+        ],
+        line_item_count: 1,
+        subtotal: 30.00,
         delivery_method: 'Standard'
       }
     ]
