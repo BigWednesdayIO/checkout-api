@@ -22,7 +22,7 @@ dependencies:
 
 test:
   override:
-    - docker run -w "/src" checkout-api bash -c "npm run ci";
+    - docker run -e "RECEIPTFUL_API_KEY=$RECEIPTFUL_API_KEY" -w "/src" checkout-api bash -c "npm run ci";
 
 deployment:
   dev:
