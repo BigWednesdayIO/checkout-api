@@ -1,15 +1,19 @@
 machine:
+  python:
+    version: 2.7.3
   services:
     - docker
 
 checkout:
   post:
     - git submodule update --init
-    
+
 dependencies:
   cache_directories:
     - '~/docker'
+    - ~/google-cloud-sdk
   override:
+    - scripts/ensure_glcoud_installed.sh
     - if [[ -e ~/docker/node.tar ]]; then docker load -i ~/docker/node.tar; fi
     - docker pull node:4.2.2
     - mkdir -p ~/docker
