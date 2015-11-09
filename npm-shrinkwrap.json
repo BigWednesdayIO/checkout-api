@@ -36,6 +36,11 @@
         }
       }
     },
+    "decimal": {
+      "version": "0.0.2",
+      "from": "decimal@*",
+      "resolved": "https://registry.npmjs.org/decimal/-/decimal-0.0.2.tgz"
+    },
     "hapi": {
       "version": "11.1.0",
       "from": "https://registry.npmjs.org/hapi/-/hapi-11.1.0.tgz",
