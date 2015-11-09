@@ -23,7 +23,12 @@
           {
             "name": "api",
             "image": "{{QUALIFIED_IMAGE_NAME}}",
-            "env": [],
+            "env": [
+              {
+                "name": "RECEIPTFUL_API_KEY",
+                "value": "{{RECEIPTFUL_API_KEY}}"
+              }
+            ],
             "ports": [
               {
                 "containerPort": 8080

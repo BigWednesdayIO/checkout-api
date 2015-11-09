@@ -8,6 +8,7 @@ const server = require('../lib/server');
 const checkout = {
   delivery_address: {
     name: 'Full Name',
+    company: 'A Company',
     line_1: '234 High Street',
     line_2: null,
     line_3: null,
@@ -18,6 +19,7 @@ const checkout = {
   },
   billing_address: {
     name: 'Full Name',
+    company: 'A Company',
     line_1: '234 High Street',
     line_2: null,
     line_3: null,
@@ -28,6 +30,7 @@ const checkout = {
   },
   payment: {
     card_number: '4242424242424242',
+    card_type: 'VISA',
     csc: '123',
     expiry_month: 8,
     expiry_year: 2016
@@ -44,6 +47,7 @@ const checkout = {
         line_items: [
           {
             product: {
+              id: 'ABC123',
               url: 'http://www.example.com/product?=ABC123',
               name: 'ABC Trainers',
               price: 50.00,
@@ -62,6 +66,7 @@ const checkout = {
         line_items: [
           {
             product: {
+              id: 'ABC123',
               url: 'http://www.example.com/product?=ABC123',
               name: 'ABC Trainers',
               price: 30.00,
