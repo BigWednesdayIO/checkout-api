@@ -19,6 +19,7 @@ const checkout = {
   },
   billing_address: {
     name: 'Full Name',
+    email: 'test_customer@bigwednesday.io',
     company: 'A Company',
     line_1: '234 High Street',
     line_2: null,
