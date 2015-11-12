@@ -85,14 +85,14 @@ const checkout = {
   }
 };
 
-const performCheckout = () => {
+const performCheckout = checkoutPayload => {
   return new Promise((resolve, reject) => {
     server((err, server) => {
       if (err) {
         return reject(err);
       }
 
-      server.inject({url: '/checkouts', method: 'POST', payload: checkout}, response => {
+      server.inject({url: '/checkouts', method: 'POST', payload: checkoutPayload || checkout}, response => {
         return resolve(response);
       });
     });
@@ -131,6 +131,17 @@ describe('/checkouts', function () {
         expect(checkoutResponse.result).to.have.property(key);
         expect(checkoutResponse.result[key]).to.deep.equal(value);
       });
+    });
+
+    it('returns payment errors', () => {
+      const payload = _.cloneDeep(checkout);
+      payload.payment.card_number = '1234567';
+
+      return performCheckout(payload)
+        .then(response => {
+          expect(response.statusCode).to.equal(400);
+          expect(response.result.message).to.equal('Your card number is incorrect.');
+        });
     });
   });
 
