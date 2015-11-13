@@ -27,8 +27,9 @@
     "decimal": "0.0.2",
     "hapi": "^11.1.0",
     "lodash": "^3.10.1",
-    "stripe": "^4.0.0",
-    "request-promise": "^1.0.2"
+    "lru-cache": "^2.7.0",
+    "request-promise": "^1.0.2",
+    "stripe": "^4.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^4.1.4",
