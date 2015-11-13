@@ -203,6 +203,11 @@
         }
       }
     },
+    "hapi-version-route": {
+      "version": "1.0.0",
+      "from": "bigwednesdayio/hapi-version-route",
+      "resolved": "git://github.com/bigwednesdayio/hapi-version-route.git#87f9a5df428f83102aa7288d39ead77433c8fb34"
+    },
     "lodash": {
       "version": "3.10.1",
       "from": "lodash@*",
