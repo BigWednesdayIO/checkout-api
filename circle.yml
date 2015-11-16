@@ -1,6 +1,8 @@
 machine:
   python:
     version: 2.7.3
+  node:
+    version: 4.1.0
   services:
     - docker
 
@@ -14,6 +16,7 @@ dependencies:
     - ~/google-cloud-sdk
   override:
     - scripts/ensure_glcoud_installed.sh
+    - npm install -g json
     - if [[ -e ~/docker/node.tar ]]; then docker load -i ~/docker/node.tar; fi
     - docker pull node:4.2.2
     - mkdir -p ~/docker
@@ -29,9 +32,9 @@ deployment:
     branch: master
     commands:
       - echo "production = true" > .npmrc
-      - scripts/rolling_deploy.sh checkout-api app=checkout-api development ${PWD} ${PWD}/kubernetes/rc.json
+      - scripts/rolling_deploy.sh checkout-api app=checkout-api development ${PWD} ${PWD}/kubernetes/rc.json ${PWD}/kubernetes/service.json
   prod:
     branch: production
     commands:
       - echo "production = true" > .npmrc
-      - scripts/rolling_deploy.sh checkout-api app=checkout-api production ${PWD} ${PWD}/kubernetes/rc.json
+      - scripts/rolling_deploy.sh checkout-api app=checkout-api production ${PWD} ${PWD}/kubernetes/rc.json ${PWD}/kubernetes/service.json
