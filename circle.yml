@@ -1,8 +1,6 @@
 machine:
   python:
     version: 2.7.3
-  node:
-    version: 4.1.0
   services:
     - docker
 
@@ -15,8 +13,7 @@ dependencies:
     - '~/docker'
     - ~/google-cloud-sdk
   override:
-    - scripts/ensure_glcoud_installed.sh
-    - npm install -g json
+    - scripts/install_deployment_tools.sh
     - if [[ -e ~/docker/node.tar ]]; then docker load -i ~/docker/node.tar; fi
     - docker pull node:4.2.2
     - mkdir -p ~/docker
