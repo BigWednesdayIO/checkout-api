@@ -15,9 +15,9 @@ dependencies:
   override:
     - scripts/install_deployment_tools.sh
     - if [[ -e ~/docker/node.tar ]]; then docker load -i ~/docker/node.tar; fi
-    - docker pull node:4.2.2
+    - docker pull node:5.2.0
     - mkdir -p ~/docker
-    - docker save node:4.2.2 > ~/docker/node.tar
+    - docker save node:5.2.0 > ~/docker/node.tar
     - docker build -t checkout-api .
 
 test:
