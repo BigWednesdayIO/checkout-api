@@ -3,87 +3,8 @@
 const _ = require('lodash');
 
 const expect = require('chai').expect;
+const CheckoutBuilder = require('../test/checkout_builder');
 const server = require('../lib/server');
-
-const checkout = {
-  delivery_address: {
-    name: 'Full Name',
-    company: 'A Company',
-    line_1: '234 High Street',
-    line_2: null,
-    line_3: null,
-    city: 'London',
-    region: 'London',
-    postcode: 'SW1 1AB',
-    country: 'GB'
-  },
-  billing_address: {
-    name: 'Full Name',
-    email: 'test_customer@bigwednesday.io',
-    company: 'A Company',
-    line_1: '234 High Street',
-    line_2: null,
-    line_3: null,
-    city: 'London',
-    region: 'London',
-    postcode: 'SW1 1AB',
-    country: 'GB'
-  },
-  payment: {
-    card_number: '4242424242424242',
-    card_type: 'VISA',
-    csc: '123',
-    expiry_month: 8,
-    expiry_year: 2016
-  },
-  basket: {
-    id: 'WEB123456',
-    currency: 'GBP',
-    subtotal: 130.00,
-    total: 130.00,
-    line_item_count: 1,
-    order_forms: [
-      {
-        supplier: 'Pub Taverns',
-        line_items: [
-          {
-            product: {
-              id: 'ABC123',
-              url: 'http://www.example.com/product?=ABC123',
-              name: 'ABC Trainers',
-              price: 50.00,
-              was_price: null
-            },
-            quantity: 2,
-            subtotal: 100.00
-          }
-        ],
-        line_item_count: 1,
-        subtotal: 100.00,
-        delivery_method: 'Standard'
-      },
-      {
-        supplier: 'Beer & Wine Co',
-        line_items: [
-          {
-            product: {
-              id: 'ABC123',
-              url: 'http://www.example.com/product?=ABC123',
-              name: 'ABC Trainers',
-              price: 30.00,
-              was_price: 40.00
-            },
-            quantity: 1,
-            subtotal: 30.00
-          }
-        ],
-        line_item_count: 1,
-        subtotal: 30.00,
-        delivery_method: 'Standard'
-      }
-    ]
-  }
-};
 
 const performCheckout = checkoutPayload => {
   return new Promise((resolve, reject) => {
@@ -92,7 +13,7 @@ const performCheckout = checkoutPayload => {
         return reject(err);
       }
 
-      server.inject({url: '/checkouts', method: 'POST', payload: checkoutPayload || checkout}, response => {
+      server.inject({url: '/checkouts', method: 'POST', payload: checkoutPayload}, response => {
         return resolve(response);
       });
     });
@@ -103,9 +24,10 @@ describe('/checkouts', function () {
   this.timeout(5000);
 
   let checkoutResponse;
+  const checkout = new CheckoutBuilder().build();
 
   before(() => {
-    return performCheckout()
+    return performCheckout(checkout)
       .then(response => {
         checkoutResponse = response;
       });
@@ -134,7 +56,7 @@ describe('/checkouts', function () {
     });
 
     it('returns payment errors', () => {
-      const payload = _.cloneDeep(checkout);
+      const payload = new CheckoutBuilder().build();
       payload.payment.card_number = '1234567';
 
       return performCheckout(payload)
