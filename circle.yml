@@ -22,7 +22,8 @@ dependencies:
 
 test:
   override:
-    - docker run -e "RECEIPTFUL_API_KEY=$RECEIPTFUL_API_KEY" -w "/src" checkout-api bash -c "npm run ci";
+    - echo -e "RECEIPTFUL_API_KEY=${RECEIPTFUL_API_KEY}" > .env
+    - docker-compose run api npm run ci
 
 deployment:
   dev:
