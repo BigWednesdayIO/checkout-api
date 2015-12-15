@@ -1,5 +1,6 @@
 'use strict';
 
+const expect = require('chai').expect;
 const sinon = require('sinon');
 const CheckoutBuilder = require('./checkout_builder');
 const dataset = require('../lib/dataset');
@@ -27,8 +28,10 @@ describe('Checkouts', () => {
   describe('process', () => {
     it('persists order', () => {
       sinon.assert.calledOnce(insertSpy);
-      const expectedKey = keySpy.returnValues[0];
-      sinon.assert.calledWith(insertSpy, sinon.match(expectedKey));
+      const key = keySpy.returnValues[0];
+      console.log(key);
+      expect(key.kind).to.equal('Order');
+      sinon.assert.calledWith(insertSpy, sinon.match(key));
     });
   });
 });
