@@ -51,7 +51,7 @@ describe('/checkouts', function () {
     it('returns the checkout resource', () => {
       _.forOwn(checkout, (value, key) => {
         expect(checkoutResponse.result).to.have.property(key);
-        expect(checkoutResponse.result[key]).to.deep.equal(value);
+        expect(_.omit(checkoutResponse.result[key], 'id', '_metadata')).to.deep.equal(value);
       });
     });
 
@@ -78,10 +78,9 @@ describe('/checkouts', function () {
       })
       .then(response => {
         expect(response.statusCode).to.equal(200);
-
         _.forOwn(checkout, (value, key) => {
           expect(response.result).to.have.property(key);
-          expect(response.result[key]).to.deep.equal(value);
+          expect(_.omit(response.result[key], 'id', '_metadata')).to.deep.equal(value);
         });
       });
     });

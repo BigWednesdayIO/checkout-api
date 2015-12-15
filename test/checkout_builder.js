@@ -33,7 +33,6 @@ class CheckoutBuilder {
       expiry_year: 2016
     };
     this.basket = {
-      id: 'WEB123456',
       currency: 'GBP',
       subtotal: 130.00,
       total: 130.00,
