@@ -60,7 +60,7 @@ describe('/checkouts', function () {
       expect(orderLink.href).to.match(/^\/orders\/.*/);
     });
 
-    it.only('returns the checkout resource', () => {
+    it('returns the checkout resource', () => {
       expect(stripMetadata(checkoutResponse.result)).to.eql(checkout);
     });
 

@@ -30,17 +30,17 @@ describe('Checkouts', () => {
 
   describe('process', () => {
     it('persists order', () => {
-      sinon.assert.callCount(insertSpy, 2 + checkout.basket.order_forms.length);
+      sinon.assert.calledThrice(insertSpy);
 
       const orderKey = keySpy.returnValues[0];
       expect(orderKey.kind).to.equal('Order');
-      sinon.assert.calledWith(insertSpy, sinon.match(orderKey), sinon.match(_.omit(checkout, 'basket')));
+      const expectedHeader = _.omit(checkout, 'basket');
+      _.forOwn(_.omit(checkout.basket, 'order_forms'), (value, key) => {
+        expectedHeader[`basket_${key}`] = value;
+      });
+      sinon.assert.calledWith(insertSpy, sinon.match(orderKey), sinon.match(expectedHeader));
 
-      const basketKey = keySpy.returnValues[1];
-      expect(basketKey.kind).to.equal('Basket');
-      sinon.assert.calledWith(insertSpy, sinon.match(basketKey), sinon.match(_.omit(checkout.basket, 'order_forms')));
-
-      const orderFormKeys = keySpy.returnValues.slice(2);
+      const orderFormKeys = keySpy.returnValues.slice(1);
       orderFormKeys.forEach((k, i) => {
         expect(k.kind).to.equal('OrderForm');
         sinon.assert.calledWith(insertSpy, sinon.match(k), sinon.match(checkout.basket.order_forms[i]));
