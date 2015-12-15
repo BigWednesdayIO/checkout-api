@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const traverse = require('traverse');
 
 const expect = require('chai').expect;
 const CheckoutBuilder = require('../test/checkout_builder');
@@ -17,6 +18,17 @@ const performCheckout = checkoutPayload => {
         return resolve(response);
       });
     });
+  });
+};
+
+const stripMetadata = obj => {
+  const clone = _.cloneDeep(obj);
+  delete clone.links;
+  return traverse(clone).map(function (x) {
+    if (this.key !== 'product') {
+      delete x.id;
+      delete x._metadata;
+    }
   });
 };
 
@@ -48,11 +60,8 @@ describe('/checkouts', function () {
       expect(orderLink.href).to.match(/^\/orders\/.*/);
     });
 
-    it('returns the checkout resource', () => {
-      _.forOwn(checkout, (value, key) => {
-        expect(checkoutResponse.result).to.have.property(key);
-        expect(_.omit(checkoutResponse.result[key], 'id', '_metadata')).to.deep.equal(value);
-      });
+    it.only('returns the checkout resource', () => {
+      expect(stripMetadata(checkoutResponse.result)).to.eql(checkout);
     });
 
     it('returns payment errors', () => {
@@ -78,10 +87,7 @@ describe('/checkouts', function () {
       })
       .then(response => {
         expect(response.statusCode).to.equal(200);
-        _.forOwn(checkout, (value, key) => {
-          expect(response.result).to.have.property(key);
-          expect(_.omit(response.result[key], 'id', '_metadata')).to.deep.equal(value);
-        });
+        expect(stripMetadata(response.result)).to.eql(checkout);
       });
     });
 

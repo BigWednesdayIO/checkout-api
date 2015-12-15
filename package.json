@@ -51,6 +51,7 @@
     "grunt-retire": "^0.3.10",
     "load-grunt-tasks": "^3.3.0",
     "mocha": "^2.3.3",
-    "sinon": "^1.17.2"
+    "sinon": "^1.17.2",
+    "traverse": "^0.6.6"
   }
 }
