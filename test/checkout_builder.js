@@ -2,6 +2,7 @@
 
 class CheckoutBuilder {
   constructor() {
+    this.customer_id = 'cii8qvyj4000001tibw16160x';
     this.delivery_address = {
       name: 'Full Name',
       company: 'A Company',
@@ -78,8 +79,14 @@ class CheckoutBuilder {
     return this;
   }
 
+  withCustomerId(customerId) {
+    this.customer_id = customerId;
+    return this;
+  }
+
   build() {
     return {
+      customer_id: this.customer_id,
       delivery_address: this.delivery_address,
       billing_address: this.billing_address,
       payment: this.payment,

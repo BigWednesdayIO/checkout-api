@@ -74,6 +74,16 @@ describe('/checkouts', function () {
           expect(response.result.message).to.equal('Your card number is incorrect.');
         });
     });
+
+    describe('validation', () => {
+      it('requires customer id', () => {
+        return performCheckout(new CheckoutBuilder().withCustomerId(undefined).build())
+          .then(response => {
+            expect(response.statusCode).to.equal(400);
+            expect(response.result.message).to.equal('child "customer_id" fails because ["customer_id" is required]');
+          });
+      });
+    });
   });
 
   describe('get', () => {

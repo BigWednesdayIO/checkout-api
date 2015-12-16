@@ -31,6 +31,7 @@
     "gcloud-datastore-model": "^1.2.0",
     "hapi": "^11.1.0",
     "hapi-version-route": "bigwednesdayio/hapi-version-route",
+    "joi": "^7.0.1",
     "lodash": "^3.10.1",
     "lru-cache": "^2.7.0",
     "request-promise": "^1.0.2",
