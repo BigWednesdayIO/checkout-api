@@ -48,7 +48,7 @@ describe('/checkouts', function () {
       expect(stripMetadata(checkoutResponse.result)).to.eql(checkout);
     });
 
-    it('returns HTTP 403 when creating a checkout for another customer', () => {
+    it('returns http 403 when creating a checkout for another customer', () => {
       return performCheckout(new CheckoutBuilder().withCustomerId('customer-1').build(), signToken({scope: ['customer-2']}))
         .then(response => {
           expect(response.statusCode).to.equal(403);
