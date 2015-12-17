@@ -48,17 +48,6 @@ describe('/checkouts', function () {
       expect(stripMetadata(checkoutResponse.result)).to.eql(checkout);
     });
 
-    it('returns payment errors', () => {
-      const payload = new CheckoutBuilder().build();
-      payload.payment.card_number = '1234567';
-
-      return performCheckout(payload)
-        .then(response => {
-          expect(response.statusCode).to.equal(400);
-          expect(response.result.message).to.equal('Your card number is incorrect.');
-        });
-    });
-
     it('returns HTTP 403 when creating a checkout for another customer', () => {
       return performCheckout(new CheckoutBuilder().withCustomerId('customer-1').build(), signToken({scope: ['customer-2']}))
         .then(response => {
