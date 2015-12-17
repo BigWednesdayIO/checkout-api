@@ -15,14 +15,15 @@ dependencies:
   override:
     - scripts/install_deployment_tools.sh
     - if [[ -e ~/docker/node.tar ]]; then docker load -i ~/docker/node.tar; fi
-    - docker pull node:4.2.2
+    - docker pull node:5.2.0
     - mkdir -p ~/docker
-    - docker save node:4.2.2 > ~/docker/node.tar
+    - docker save node:5.2.0 > ~/docker/node.tar
     - docker build -t checkout-api .
 
 test:
   override:
-    - docker run -e "RECEIPTFUL_API_KEY=$RECEIPTFUL_API_KEY" -w "/src" checkout-api bash -c "npm run ci";
+    - echo -e "RECEIPTFUL_API_KEY=${RECEIPTFUL_API_KEY}" > .env
+    - docker-compose run api npm run ci
 
 deployment:
   dev:
