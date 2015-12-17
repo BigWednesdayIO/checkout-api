@@ -1,13 +1,11 @@
 'use strict';
 
 const _ = require('lodash');
-const traverse = require('traverse');
-
 const expect = require('chai').expect;
 const CheckoutBuilder = require('../test/checkout_builder');
-const server = require('../lib/server');
 const signToken = require('./sign_jwt');
 const specRequest = require('./spec_request');
+const stripMetadata = require('./strip_metadata');
 
 const performCheckout = (checkoutPayload, token) => {
   return specRequest({
@@ -17,19 +15,6 @@ const performCheckout = (checkoutPayload, token) => {
     headers: {authorization: token || signToken({scope: [`customer:${checkoutPayload.customer_id}`]})}
   });
 };
-
-const stripMetadata = obj => {
-  const clone = _.cloneDeep(obj);
-  delete clone.links;
-  return traverse(clone).map(function (x) {
-    if (this.key !== 'product') {
-      delete x.id;
-      delete x._metadata;
-    }
-  });
-};
-
-const adminToken = signToken({scope: ['admin']});
 
 describe('/checkouts', function () {
   this.timeout(5000);
@@ -49,8 +34,8 @@ describe('/checkouts', function () {
       expect(checkoutResponse.statusCode).to.equal(201);
     });
 
-    it('returns the checkout location header', () => {
-      expect(checkoutResponse.headers.location).to.equal(`/checkouts/${checkoutResponse.result.id}`);
+    it('returns the order location header', () => {
+      expect(checkoutResponse.headers.location).to.equal(`/orders/${checkoutResponse.result.id}`);
     });
 
     it('returns a url for the created order', () => {
@@ -88,43 +73,6 @@ describe('/checkouts', function () {
             expect(response.statusCode).to.equal(400);
             expect(response.result.message).to.equal('child "customer_id" fails because ["customer_id" is required]');
           });
-      });
-    });
-  });
-
-  describe('get', () => {
-    it('returns the checkout resource', () => {
-      expect(checkoutResponse.statusCode).to.equal(201);
-
-      return new Promise(resolve => {
-        checkoutResponse.request.server.inject({
-          url: checkoutResponse.headers.location,
-          method: 'GET',
-          headers: {authorization: adminToken}
-        }, response => {
-          return resolve(response);
-        });
-      })
-      .then(response => {
-        expect(response.statusCode).to.equal(200);
-        expect(stripMetadata(response.result)).to.eql(checkout);
-      });
-    });
-
-    it('returns a 404 for a non-existant checkout', done => {
-      server((err, server) => {
-        if (err) {
-          return done(err);
-        }
-
-        server.inject({
-          url: '/checkouts/1234',
-          method: 'GET',
-          headers: {authorization: adminToken}
-        }, response => {
-          expect(response.statusCode).to.equal(404);
-          done();
-        });
       });
     });
   });
