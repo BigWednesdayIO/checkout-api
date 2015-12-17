@@ -9,7 +9,7 @@ const signToken = (payload, options) => {
     Object.assign({
       algorithm: 'HS256',
       issuer: `https://${process.env.AUTH0_DOMAIN}/`,
-      audience: process.env.AUTHO_CLIENT_ID
+      audience: process.env.AUTH0_CLIENT_ID
     }, options));
 };
 
