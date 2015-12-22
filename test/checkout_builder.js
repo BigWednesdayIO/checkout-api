@@ -39,7 +39,7 @@ class CheckoutBuilder {
       total: 130.00,
       line_item_count: 1,
       order_forms: [{
-        supplier: 'Pub Taverns',
+        supplier_id: 'Pub Taverns',
         line_items: [{
           product: {
             id: 'ABC123',
@@ -55,7 +55,7 @@ class CheckoutBuilder {
         subtotal: 100.00,
         delivery_method: 'Standard'
       }, {
-        supplier: 'Beer & Wine Co',
+        supplier_id: 'Beer & Wine Co',
         line_items: [{
           product: {
             id: 'ABC123',
