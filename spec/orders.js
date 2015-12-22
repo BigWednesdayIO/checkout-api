@@ -114,11 +114,10 @@ describe('/orders', function () {
       });
     });
 
-    describe('orders for supplier', () => {
-      const filterOrderFormsBySupplier = (checkout, supplierId) => {
-        const supplierOrder = _.cloneDeep(checkout);
-        supplierOrder.basket.order_forms = _.filter(supplierOrder.basket.order_forms, {supplier: supplierId});
-        return supplierOrder;
+    describe.only('orders for supplier', () => {
+      const supplierViewableOnly = (checkout, supplierId) => {
+        const supplierViewable = _.pick(checkout, ['customer_id', 'delivery_address', 'billing_address', 'id', '_metadata']);
+        return Object.assign(supplierViewable, {basket: {order_forms: _.filter(checkout.basket.order_forms, {supplier: supplierId})}});
       };
 
       it('returns order resources for supplier', () => {
@@ -130,8 +129,8 @@ describe('/orders', function () {
         .then(response => {
           expect(response.statusCode).to.equal(200);
           const expected = [
-            filterOrderFormsBySupplier(checkouts[0], 'supplier-a'),
-            filterOrderFormsBySupplier(checkouts[1], 'supplier-a')
+            supplierViewableOnly(checkouts[0], 'supplier-a'),
+            supplierViewableOnly(checkouts[1], 'supplier-a')
           ].map(_.partialRight(_.omit, 'links'));
           expect(response.result).to.eql(expected);
         });
