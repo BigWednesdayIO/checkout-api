@@ -25,6 +25,14 @@
             "image": "{{QUALIFIED_IMAGE_NAME}}",
             "env": [
               {
+                "name": "GCLOUD_PROJECT_ID",
+                "value": "{{CLOUDSDK_CORE_PROJECT}}"
+              },
+              {
+                "name": "GCLOUD_KEY",
+                "value": "{{GCLOUD_KEY}}"
+              },
+              {
                 "name": "RECEIPTFUL_API_KEY",
                 "value": "{{RECEIPTFUL_API_KEY}}"
               },
