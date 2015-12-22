@@ -42,7 +42,7 @@ describe('/orders/{orderId}/order_forms/{id}/status', function () {
       .then(response => {
         expect(response.statusCode).to.equal(200);
         expect(_.omit(response.result, '_metadata'))
-          .to.eql(Object.assign({status: 'dispatched'}, _.omit(checkout.basket.order_forms[0], '_metadata')));
+          .to.eql(_.defaults({status: 'dispatched'}, _.omit(checkout.basket.order_forms[0], '_metadata')));
       });
     });
 

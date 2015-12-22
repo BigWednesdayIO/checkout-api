@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const expect = require('chai').expect;
 const CheckoutBuilder = require('../test/checkout_builder');
 const signToken = require('./sign_jwt');
@@ -35,7 +36,11 @@ describe('/orders/{id}', function () {
       })
       .then(response => {
         expect(response.statusCode).to.equal(200);
-        expect(stripMetadata(response.result)).to.eql(checkout);
+        const expected = _.cloneDeep(checkout);
+        expected.basket.order_forms.forEach(of => {
+          of.status = 'accepted';
+        });
+        expect(stripMetadata(response.result)).to.eql(expected);
       });
     });
 
