@@ -38,7 +38,8 @@ module.exports = function (grunt) {
     },
     env: {
       test: {
-        src: '.env'
+        src: '.env',
+        RESPONSE_FAIL_ACTION: 'error'
       }
     },
     retire: {
