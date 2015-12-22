@@ -26,13 +26,6 @@ class CheckoutBuilder {
       postcode: 'SW1 1AB',
       country: 'GB'
     };
-    this.payment = {
-      card_number: '4242424242424242',
-      card_type: 'VISA',
-      csc: '123',
-      expiry_month: 8,
-      expiry_year: 2016
-    };
     this.basket = {
       currency: 'GBP',
       subtotal: 130.00,
@@ -74,11 +67,6 @@ class CheckoutBuilder {
     };
   }
 
-  withPayment(payment) {
-    this.payment = payment;
-    return this;
-  }
-
   withCustomerId(customerId) {
     this.customer_id = customerId;
     return this;
@@ -94,7 +82,6 @@ class CheckoutBuilder {
       customer_id: this.customer_id,
       delivery_address: this.delivery_address,
       billing_address: this.billing_address,
-      payment: this.payment,
       basket: this.basket
     };
   }
