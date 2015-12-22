@@ -17,13 +17,16 @@ describe('/orders', function () {
                                       .withCustomerId('customer-a')
                                       .withOrderForms([new OrderFormBuilder().withSupplierId('supplier-a').build()])
                                       .build();
-  const checkoutCustomerASupplierB = new CheckoutBuilder()
+  const checkoutCustomerASuppliersAB = new CheckoutBuilder()
                                       .withCustomerId('customer-a')
-                                      .withOrderForms([new OrderFormBuilder().withSupplierId('supplier-b').build()])
+                                      .withOrderForms([
+                                        new OrderFormBuilder().withSupplierId('supplier-a').build(),
+                                        new OrderFormBuilder().withSupplierId('supplier-b').build()
+                                      ])
                                       .build();
   const checkoutCustomerBSupplierA = new CheckoutBuilder()
                                       .withCustomerId('customer-b')
-                                      .withOrderForms([new OrderFormBuilder().withSupplierId('supplier-a').build()])
+                                      .withOrderForms([new OrderFormBuilder().withSupplierId('supplier-b').build()])
                                       .build();
 
   beforeEach(() => {
@@ -40,8 +43,8 @@ describe('/orders', function () {
       return specRequest({
         url: '/checkouts',
         method: 'POST',
-        payload: checkoutCustomerASupplierB,
-        headers: {authorization: signToken({scope: [`customer:${checkoutCustomerASupplierB.customer_id}`]})}
+        payload: checkoutCustomerASuppliersAB,
+        headers: {authorization: signToken({scope: [`customer:${checkoutCustomerASuppliersAB.customer_id}`]})}
       });
     })
     .then(response => {
@@ -87,7 +90,7 @@ describe('/orders', function () {
     });
 
     describe('customer scope', () => {
-      it('returns all order resources for customer', () => {
+      it('returns order resources for customer', () => {
         return specRequest({
           url: '/orders?customer_id=customer-a',
           method: 'GET',
@@ -118,6 +121,30 @@ describe('/orders', function () {
         })
         .then(response => {
           expect(response.statusCode).to.equal(403);
+        });
+      });
+    });
+
+    describe('supplier scope', () => {
+      const buildSupplierOrder = (checkout, supplierId) => {
+        const supplierOrder = _.cloneDeep(checkout);
+        supplierOrder.basket.order_forms = _.filter(supplierOrder.basket.order_forms, {supplier: supplierId});
+        return supplierOrder;
+      };
+
+      it('returns order resources for supplier', () => {
+        return specRequest({
+          url: '/orders?supplier_id=supplier-a',
+          method: 'GET',
+          headers: {authorization: signToken({scope: ['supplier:supplier-a']})}
+        })
+        .then(response => {
+          expect(response.statusCode).to.equal(200);
+          const expected = [
+            buildSupplierOrder(checkouts[0], 'supplier-a'),
+            buildSupplierOrder(checkouts[1], 'supplier-a')
+          ].map(_.partialRight(_.omit, 'links'));
+          expect(response.result).to.eql(expected);
         });
       });
     });
