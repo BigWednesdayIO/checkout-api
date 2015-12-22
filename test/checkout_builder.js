@@ -72,8 +72,23 @@ class CheckoutBuilder {
     return this;
   }
 
+  withDeliveryAddress(address) {
+    this.delivery_address = address;
+    return this;
+  }
+
+  withBillingAddress(address) {
+    this.billing_address = address;
+    return this;
+  }
+
   withOrderForms(orderForms) {
     this.basket.order_forms = orderForms;
+    return this;
+  }
+
+  withBasket(basket) {
+    this.basket = basket;
     return this;
   }
 

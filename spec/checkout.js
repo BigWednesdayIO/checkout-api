@@ -63,6 +63,30 @@ describe('/checkouts', function () {
             expect(response.result.message).to.equal('child "customer_id" fails because ["customer_id" is required]');
           });
       });
+
+      it('requires delivery address', () => {
+        return performCheckout(new CheckoutBuilder().withDeliveryAddress(undefined).build())
+          .then(response => {
+            expect(response.statusCode).to.equal(400);
+            expect(response.result.message).to.equal('child "delivery_address" fails because ["delivery_address" is required]');
+          });
+      });
+
+      it('requires billing address', () => {
+        return performCheckout(new CheckoutBuilder().withBillingAddress(undefined).build())
+          .then(response => {
+            expect(response.statusCode).to.equal(400);
+            expect(response.result.message).to.equal('child "billing_address" fails because ["billing_address" is required]');
+          });
+      });
+
+      it('requires basket', () => {
+        return performCheckout(new CheckoutBuilder().withBasket(undefined).build())
+          .then(response => {
+            expect(response.statusCode).to.equal(400);
+            expect(response.result.message).to.equal('child "basket" fails because ["basket" is required]');
+          });
+      });
     });
   });
 });
