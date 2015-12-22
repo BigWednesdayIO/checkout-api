@@ -89,7 +89,7 @@ describe('/orders', function () {
       });
     });
 
-    describe('customer scope', () => {
+    describe('orders for customer', () => {
       it('returns order resources for customer', () => {
         return specRequest({
           url: '/orders?customer_id=customer-a',
@@ -99,17 +99,6 @@ describe('/orders', function () {
         .then(response => {
           expect(response.statusCode).to.equal(200);
           expect(response.result).to.eql(_.filter(checkouts, {customer_id: 'customer-a'}).map(_.partialRight(_.omit, 'links')));
-        });
-      });
-
-      it('returns 403 without customer_id query', () => {
-        return specRequest({
-          url: '/orders',
-          method: 'GET',
-          headers: {authorization: signToken({scope: ['customer:customer-a']})}
-        })
-        .then(response => {
-          expect(response.statusCode).to.equal(403);
         });
       });
 
@@ -125,8 +114,8 @@ describe('/orders', function () {
       });
     });
 
-    describe('supplier scope', () => {
-      const buildSupplierOrder = (checkout, supplierId) => {
+    describe('orders for supplier', () => {
+      const filterOrderFormsBySupplier = (checkout, supplierId) => {
         const supplierOrder = _.cloneDeep(checkout);
         supplierOrder.basket.order_forms = _.filter(supplierOrder.basket.order_forms, {supplier: supplierId});
         return supplierOrder;
@@ -141,10 +130,21 @@ describe('/orders', function () {
         .then(response => {
           expect(response.statusCode).to.equal(200);
           const expected = [
-            buildSupplierOrder(checkouts[0], 'supplier-a'),
-            buildSupplierOrder(checkouts[1], 'supplier-a')
+            filterOrderFormsBySupplier(checkouts[0], 'supplier-a'),
+            filterOrderFormsBySupplier(checkouts[1], 'supplier-a')
           ].map(_.partialRight(_.omit, 'links'));
           expect(response.result).to.eql(expected);
+        });
+      });
+
+      it('returns 403 requesting supplier orders without correct scope', () => {
+        return specRequest({
+          url: '/orders?supplier_id=supplier-b',
+          method: 'GET',
+          headers: {authorization: signToken({scope: ['supplier:supplier-a']})}
+        })
+        .then(response => {
+          expect(response.statusCode).to.equal(403);
         });
       });
     });
