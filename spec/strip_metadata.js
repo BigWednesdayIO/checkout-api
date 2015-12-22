@@ -10,6 +10,7 @@ module.exports = obj => {
     if (this.key !== 'product') {
       delete x.id;
       delete x._metadata;
+      delete x.links;
     }
   });
 };

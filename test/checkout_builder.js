@@ -84,6 +84,11 @@ class CheckoutBuilder {
     return this;
   }
 
+  withOrderForms(orderForms) {
+    this.basket.order_forms = orderForms;
+    return this;
+  }
+
   build() {
     return {
       customer_id: this.customer_id,

@@ -8,7 +8,7 @@ const stripMetadata = require('./strip_metadata');
 
 const adminToken = signToken({scope: ['admin']});
 
-describe('/orders', function () {
+describe('/orders/{id}', function () {
   this.timeout(5000);
 
   let checkoutResponse;
