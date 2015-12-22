@@ -28,7 +28,7 @@
     "cuid": "^1.3.8",
     "debug": "^2.2.0",
     "decimal": "0.0.2",
-    "gcloud": "^0.26.1",
+    "gcloud": "0.25.1",
     "gcloud-datastore-model": "^1.2.0",
     "hapi": "^11.1.0",
     "hapi-auth-jwt2": "^5.2.1",
