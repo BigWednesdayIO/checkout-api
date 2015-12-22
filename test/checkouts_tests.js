@@ -32,7 +32,7 @@ describe('Checkouts', () => {
       sinon.assert.calledOnce(insertSpy);
 
       const orderKey = keySpy.returnValues[0];
-      expect(orderKey.kind).to.equal('Order');
+      expect(orderKey.path[0]).to.equal('Order');
 
       const expectedOrder = _.omit(checkout, 'basket');
       _.forOwn(_.omit(checkout.basket, 'order_forms'), (value, key) => {
@@ -41,7 +41,7 @@ describe('Checkouts', () => {
 
       const orderFormKeys = keySpy.returnValues.slice(1);
       orderFormKeys.forEach(k => {
-        expect(k.kind).to.equal('OrderForm');
+        expect(k.path[2]).to.equal('OrderForm');
         expect(k.path[1]).to.equal(_.last(orderKey.path));
       });
 
