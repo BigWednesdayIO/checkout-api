@@ -72,6 +72,17 @@ describe('/orders', function () {
           expect(response.result).to.eql(checkouts.map(_.partialRight(_.omit, 'links')));
         });
       });
+
+      it('returns http 403 without admin scope', () => {
+        return specRequest({
+          url: '/orders',
+          method: 'GET',
+          headers: {authorization: signToken({scope: ['customer:customer-a']})}
+        })
+        .then(response => {
+          expect(response.statusCode).to.equal(403);
+        });
+      });
     });
   });
 });
