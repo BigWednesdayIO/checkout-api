@@ -32,7 +32,7 @@ module.exports = function (grunt) {
         tasks: ['lint', 'test']
       },
       specs: {
-        files: ['<%= specs %>'],
+        files: ['./lib/server.js', '<%= specs %>'],
         tasks: ['lint', 'spec']
       }
     },
