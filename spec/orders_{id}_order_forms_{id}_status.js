@@ -7,7 +7,7 @@ const OrderFormBuilder = require('../test/order_form_builder');
 const signToken = require('./sign_jwt');
 const specRequest = require('./spec_request');
 
-const adminToken = signToken({scope: ['admin']});
+const customerAToken = signToken({scope: ['customer:customer-a']});
 
 describe('/orders/{orderId}/order_forms/{id}/status', function () {
   this.timeout(5000);
@@ -16,13 +16,15 @@ describe('/orders/{orderId}/order_forms/{id}/status', function () {
 
   beforeEach(() => {
     const checkoutParams = new CheckoutBuilder()
+      .withCustomerId('customer-a')
       .withOrderForms([new OrderFormBuilder().build()])
       .build();
+
     return specRequest({
       url: '/checkouts',
       method: 'POST',
       payload: checkoutParams,
-      headers: {authorization: signToken({scope: [`customer:${checkoutParams.customer_id}`]})}
+      headers: {authorization: customerAToken}
     })
     .then(response => {
       checkout = response.result;
@@ -35,7 +37,7 @@ describe('/orders/{orderId}/order_forms/{id}/status', function () {
         url: `/orders/${checkout.id}/order_forms/${checkout.basket.order_forms[0].id}/status`,
         method: 'PATCH',
         payload: {status: 'dispatched'},
-        headers: {authorization: adminToken}
+        headers: {authorization: customerAToken}
       })
       .then(response => {
         expect(response.statusCode).to.equal(200);
@@ -44,24 +46,36 @@ describe('/orders/{orderId}/order_forms/{id}/status', function () {
       });
     });
 
-    it('returns 404 for missing order', () => {
+    it('returns http 404 for a non-existant order', () => {
       return specRequest({
         url: `/orders/12345/order_forms/${checkout.basket.order_forms[0].id}/status`,
         method: 'PATCH',
         payload: {status: 'dispatched'},
-        headers: {authorization: adminToken}
+        headers: {authorization: customerAToken}
       })
       .then(response => {
         expect(response.statusCode).to.equal(404);
       });
     });
 
-    it('returns 404 for missing order form', () => {
+    it('returns http 403 when requesting another customer\'s order', () => {
+      return specRequest({
+        url: `/orders/${checkout.id}/order_forms/${checkout.basket.order_forms[0].id}/status`,
+        method: 'PATCH',
+        payload: {status: 'dispatched'},
+        headers: {authorization: signToken({scope: ['customer:customer-b']})}
+      })
+      .then(response => {
+        expect(response.statusCode).to.equal(403);
+      });
+    });
+
+    it('returns 404 for non-existant order form', () => {
       return specRequest({
         url: `/orders/${checkout.id}/order_forms/98765/status`,
         method: 'PATCH',
         payload: {status: 'dispatched'},
-        headers: {authorization: adminToken}
+        headers: {authorization: customerAToken}
       })
       .then(response => {
         expect(response.statusCode).to.equal(404);
@@ -74,7 +88,7 @@ describe('/orders/{orderId}/order_forms/{id}/status', function () {
           url: `/orders/${checkout.id}/order_forms/${checkout.basket.order_forms[0].id}/status`,
           method: 'PATCH',
           payload: {status: 'accepted'},
-          headers: {authorization: adminToken}
+          headers: {authorization: customerAToken}
         })
         .then(response => {
           expect(response.statusCode).to.equal(200);
@@ -86,7 +100,7 @@ describe('/orders/{orderId}/order_forms/{id}/status', function () {
           url: `/orders/${checkout.id}/order_forms/${checkout.basket.order_forms[0].id}/status`,
           method: 'PATCH',
           payload: {status: 'dispatched'},
-          headers: {authorization: adminToken}
+          headers: {authorization: customerAToken}
         })
         .then(response => {
           expect(response.statusCode).to.equal(200);
@@ -98,7 +112,7 @@ describe('/orders/{orderId}/order_forms/{id}/status', function () {
           url: `/orders/${checkout.id}/order_forms/${checkout.basket.order_forms[0].id}/status`,
           method: 'PATCH',
           payload: {status: 'rejected'},
-          headers: {authorization: adminToken}
+          headers: {authorization: customerAToken}
         })
         .then(response => {
           expect(response.statusCode).to.equal(200);
@@ -110,7 +124,7 @@ describe('/orders/{orderId}/order_forms/{id}/status', function () {
           url: `/orders/${checkout.id}/order_forms/${checkout.basket.order_forms[0].id}/status`,
           method: 'PATCH',
           payload: {status: 'cancelled'},
-          headers: {authorization: adminToken}
+          headers: {authorization: customerAToken}
         })
         .then(response => {
           expect(response.statusCode).to.equal(200);
@@ -122,7 +136,7 @@ describe('/orders/{orderId}/order_forms/{id}/status', function () {
           url: `/orders/${checkout.id}/order_forms/${checkout.basket.order_forms[0].id}/status`,
           method: 'PATCH',
           payload: {status: 'delivered'},
-          headers: {authorization: adminToken}
+          headers: {authorization: customerAToken}
         })
         .then(response => {
           expect(response.statusCode).to.equal(200);
@@ -134,7 +148,7 @@ describe('/orders/{orderId}/order_forms/{id}/status', function () {
           url: `/orders/${checkout.id}/order_forms/${checkout.basket.order_forms[0].id}/status`,
           method: 'PATCH',
           payload: {status: 'paid'},
-          headers: {authorization: adminToken}
+          headers: {authorization: customerAToken}
         })
         .then(response => {
           expect(response.statusCode).to.equal(200);
@@ -146,7 +160,7 @@ describe('/orders/{orderId}/order_forms/{id}/status', function () {
           url: `/orders/${checkout.id}/order_forms/${checkout.basket.order_forms[0].id}/status`,
           method: 'PATCH',
           payload: {status: 'foo'},
-          headers: {authorization: adminToken}
+          headers: {authorization: customerAToken}
         })
         .then(response => {
           expect(response.statusCode).to.equal(400);

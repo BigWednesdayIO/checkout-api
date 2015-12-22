@@ -9,12 +9,12 @@ const stripMetadata = require('./strip_metadata');
 const adminToken = signToken({scope: ['admin']});
 
 describe('/orders/{id}', function () {
-  this.timeout(5000);
+  this.timeout(10000);
 
   let checkoutResponse;
   const checkout = new CheckoutBuilder().build();
 
-  before(() => {
+  beforeEach(() => {
     return specRequest({
       url: '/checkouts',
       method: 'POST',
@@ -39,7 +39,7 @@ describe('/orders/{id}', function () {
       });
     });
 
-    it('returns http 404 for a non-existant order when admin', () => {
+    it('returns http 404 for a non-existant', () => {
       return specRequest({
         url: '/orders/1234',
         method: 'GET',
@@ -47,17 +47,6 @@ describe('/orders/{id}', function () {
       })
       .then(response => {
         expect(response.statusCode).to.equal(404);
-      });
-    });
-
-    it('returns http 403 for a non-existant order', () => {
-      return specRequest({
-        url: '/orders/1234',
-        method: 'GET',
-        headers: {authorization: signToken({scope: ['customer:9876']})}
-      })
-      .then(response => {
-        expect(response.statusCode).to.equal(403);
       });
     });
 
