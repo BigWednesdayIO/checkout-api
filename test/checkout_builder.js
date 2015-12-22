@@ -26,20 +26,13 @@ class CheckoutBuilder {
       postcode: 'SW1 1AB',
       country: 'GB'
     };
-    this.payment = {
-      card_number: '4242424242424242',
-      card_type: 'VISA',
-      csc: '123',
-      expiry_month: 8,
-      expiry_year: 2016
-    };
     this.basket = {
       currency: 'GBP',
       subtotal: 130.00,
       total: 130.00,
       line_item_count: 1,
       order_forms: [{
-        supplier: 'Pub Taverns',
+        supplier_id: 'Pub Taverns',
         line_items: [{
           product: {
             id: 'ABC123',
@@ -55,7 +48,7 @@ class CheckoutBuilder {
         subtotal: 100.00,
         delivery_method: 'Standard'
       }, {
-        supplier: 'Beer & Wine Co',
+        supplier_id: 'Beer & Wine Co',
         line_items: [{
           product: {
             id: 'ABC123',
@@ -74,13 +67,18 @@ class CheckoutBuilder {
     };
   }
 
-  withPayment(payment) {
-    this.payment = payment;
+  withCustomerId(customerId) {
+    this.customer_id = customerId;
     return this;
   }
 
-  withCustomerId(customerId) {
-    this.customer_id = customerId;
+  withDeliveryAddress(address) {
+    this.delivery_address = address;
+    return this;
+  }
+
+  withBillingAddress(address) {
+    this.billing_address = address;
     return this;
   }
 
@@ -89,12 +87,16 @@ class CheckoutBuilder {
     return this;
   }
 
+  withBasket(basket) {
+    this.basket = basket;
+    return this;
+  }
+
   build() {
     return {
       customer_id: this.customer_id,
       delivery_address: this.delivery_address,
       billing_address: this.billing_address,
-      payment: this.payment,
       basket: this.basket
     };
   }

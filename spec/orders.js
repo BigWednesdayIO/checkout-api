@@ -117,7 +117,7 @@ describe('/orders', function () {
     describe('orders for supplier', () => {
       const supplierViewableOnly = (checkout, supplierId) => {
         const supplierViewable = _.pick(checkout, ['customer_id', 'delivery_address', 'billing_address', 'id', '_metadata']);
-        return Object.assign(supplierViewable, {basket: {order_forms: _.filter(checkout.basket.order_forms, {supplier: supplierId})}});
+        return Object.assign(supplierViewable, {basket: {order_forms: _.filter(checkout.basket.order_forms, {supplier_id: supplierId})}});
       };
 
       it('returns order resources for supplier', () => {

@@ -32,13 +32,14 @@ module.exports = function (grunt) {
         tasks: ['lint', 'test']
       },
       specs: {
-        files: ['./lib/server.js', '<%= specs %>'],
+        files: ['./lib/server.js', './lib/handlers/*.js', './lib/*_schema.js', '<%= specs %>'],
         tasks: ['lint', 'spec']
       }
     },
     env: {
       test: {
-        src: '.env'
+        src: '.env',
+        RESPONSE_FAIL_ACTION: 'error'
       }
     },
     retire: {
