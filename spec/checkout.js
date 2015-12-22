@@ -45,7 +45,11 @@ describe('/checkouts', function () {
     });
 
     it('returns the checkout resource', () => {
-      expect(stripMetadata(checkoutResponse.result)).to.eql(checkout);
+      const expected = _.cloneDeep(checkout);
+      expected.basket.order_forms.forEach(of => {
+        of.status = 'accepted';
+      });
+      expect(stripMetadata(checkoutResponse.result)).to.eql(expected);
     });
 
     it('returns http 403 when creating a checkout for another customer', () => {
