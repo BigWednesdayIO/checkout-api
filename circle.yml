@@ -13,7 +13,7 @@ dependencies:
     - '~/docker'
     - ~/google-cloud-sdk
   override:
-    - scripts/install_deployment_tools.sh
+    - scripts/install_sdk.sh
     - if [[ -e ~/docker/node.tar ]]; then docker load -i ~/docker/node.tar; fi
     - docker pull node:5.3.0
     - mkdir -p ~/docker
@@ -30,9 +30,9 @@ deployment:
     branch: master
     commands:
       - echo "production = true" > .npmrc
-      - scripts/rolling_deploy.sh checkout-api app=checkout-api development ${PWD} ${PWD}/kubernetes/rc.json ${PWD}/kubernetes/service.json
+      - scripts/kubernetes_deploy.sh checkout-api app=checkout-api development ${PWD} ${PWD}/kubernetes/rc.json ${PWD}/kubernetes/service.json
   prod:
     tag: /v.*/
     commands:
       - echo "production = true" > .npmrc
-      - scripts/rolling_deploy.sh checkout-api app=checkout-api production ${PWD} ${PWD}/kubernetes/rc.json ${PWD}/kubernetes/service.json
+      - scripts/kubernetes_deploy.sh checkout-api app=checkout-api production ${PWD} ${PWD}/kubernetes/rc.json ${PWD}/kubernetes/service.json

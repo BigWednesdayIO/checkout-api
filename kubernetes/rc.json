@@ -2,7 +2,7 @@
   "apiVersion": "v1",
   "kind": "ReplicationController",
   "metadata": {
-    "name": "checkout-api-rc-{{TAG}}",
+    "name": "checkout-api-rc-{{VERSION}}",
     "labels": {
       "app": "checkout-api",
       "env": "{{NAMESPACE}}"
