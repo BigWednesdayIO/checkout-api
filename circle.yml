@@ -32,7 +32,7 @@ deployment:
       - echo "production = true" > .npmrc
       - scripts/rolling_deploy.sh checkout-api app=checkout-api development ${PWD} ${PWD}/kubernetes/rc.json ${PWD}/kubernetes/service.json
   prod:
-    branch: production
+    tag: /v.*/
     commands:
       - echo "production = true" > .npmrc
       - scripts/rolling_deploy.sh checkout-api app=checkout-api production ${PWD} ${PWD}/kubernetes/rc.json ${PWD}/kubernetes/service.json
