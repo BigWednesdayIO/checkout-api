@@ -12,6 +12,12 @@ Also requires
 Since these are senstive they are not included in the docker-compose.yml.
 The docker file will source `.env` file if it is present in the project directory, this can be used for local development.
 
+For sending email / sms confirmation, the following are needed:
+  - TWILIO_ACCOUNT_SID
+  - TWILIO_AUTH_TOKEN
+  - TWILIO_NUMBER
+  - SENDGRID_API_USER
+  - SENDGRID_API_KEY
 
 ## Updating Datastore indexes
 
