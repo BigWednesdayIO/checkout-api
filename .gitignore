@@ -29,3 +29,4 @@ node_modules
 .retire-cache
 
 .env
+tmp-*.{html,pdf}
