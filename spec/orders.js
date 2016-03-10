@@ -9,9 +9,7 @@ const specRequest = require('./spec_request');
 
 const adminToken = signToken({scope: ['admin']});
 
-describe('/orders', function () {
-  this.timeout(10000);
-
+describe('/orders', () => {
   let checkouts;
   const checkoutCustomerASupplierA = new CheckoutBuilder()
                                       .withCustomerId('customer-a')
