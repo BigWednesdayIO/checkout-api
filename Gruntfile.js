@@ -14,7 +14,7 @@ module.exports = function (grunt) {
       options: {
         reporter: 'spec',
         clearRequireCache: false,
-        timeout: 10000
+        timeout: 20000
       },
       test: {
         src: ['<%= tests %>']

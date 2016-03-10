@@ -16,9 +16,7 @@ const performCheckout = (checkoutPayload, token) => {
   });
 };
 
-describe('/checkouts', function () {
-  this.timeout(5000);
-
+describe('/checkouts', () => {
   let checkoutResponse;
   const checkout = new CheckoutBuilder().build();
 

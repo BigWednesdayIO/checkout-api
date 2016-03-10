@@ -9,9 +9,7 @@ const specRequest = require('./spec_request');
 
 const customerAToken = signToken({scope: ['customer:customer-a']});
 
-describe('/orders/{orderId}/order_forms/{id}/status', function () {
-  this.timeout(5000);
-
+describe('/orders/{orderId}/order_forms/{id}/status', () => {
   let checkout;
 
   beforeEach(() => {

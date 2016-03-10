@@ -14,8 +14,7 @@ describe('Checkouts', () => {
   let sandbox;
   let checkout;
 
-  beforeEach(function () {
-    this.timeout(5000);
+  beforeEach(() => {
     sandbox = sinon.sandbox.create();
     insertSpy = sandbox.stub(dataset.constructor.super_.prototype, 'insert', _.noop);
     keySpy = sandbox.spy(dataset, 'key');
