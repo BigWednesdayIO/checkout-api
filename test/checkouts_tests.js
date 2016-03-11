@@ -3,12 +3,9 @@
 const _ = require('lodash');
 const expect = require('chai').expect;
 const sinon = require('sinon');
-const nock = require('nock');
-const url = require('url');
 const CheckoutBuilder = require('./checkout_builder');
-const suppliersData = require('./suppliers_data');
 const dataset = require('../lib/dataset');
-const uris = require('../lib/uris');
+const mockSuppliers = require('./mock_suppliers');
 
 const checkouts = require('../lib/checkouts');
 
@@ -19,11 +16,7 @@ describe('Checkouts', () => {
   let checkout;
 
   beforeEach(() => {
-    const suppliersUrl = url.parse(uris.suppliers);
-    nock(`${suppliersUrl.protocol}//${suppliersUrl.host}`)
-      .get(suppliersUrl.path || '/')
-      .reply(200, suppliersData);
-
+    mockSuppliers.begin();
     sandbox = sinon.sandbox.create();
     insertSpy = sandbox.stub(dataset.constructor.super_.prototype, 'insert', _.noop);
     keySpy = sandbox.spy(dataset, 'key');
@@ -32,7 +25,7 @@ describe('Checkouts', () => {
   });
 
   afterEach(() => {
-    nock.cleanAll();
+    mockSuppliers.end();
     sandbox.restore();
   });
 

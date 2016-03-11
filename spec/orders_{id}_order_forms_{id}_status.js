@@ -6,6 +6,7 @@ const CheckoutBuilder = require('../test/checkout_builder');
 const OrderFormBuilder = require('../test/order_form_builder');
 const signToken = require('./sign_jwt');
 const specRequest = require('./spec_request');
+const mockSuppliers = require('../test/mock_suppliers');
 
 const customerAToken = signToken({scope: ['customer:customer-a']});
 
@@ -18,6 +19,8 @@ describe('/orders/{orderId}/order_forms/{id}/status', () => {
       .withOrderForms([new OrderFormBuilder().build()])
       .build();
 
+    mockSuppliers.begin();
+
     return specRequest({
       url: '/checkouts',
       method: 'POST',
@@ -27,6 +30,10 @@ describe('/orders/{orderId}/order_forms/{id}/status', () => {
     .then(response => {
       checkout = response.result;
     });
+  });
+
+  afterEach(() => {
+    mockSuppliers.end();
   });
 
   describe('patch', () => {

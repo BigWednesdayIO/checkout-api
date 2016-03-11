@@ -6,6 +6,7 @@ const CheckoutBuilder = require('../test/checkout_builder');
 const signToken = require('./sign_jwt');
 const specRequest = require('./spec_request');
 const stripMetadata = require('./strip_metadata');
+const mockSuppliers = require('../test/mock_suppliers');
 
 const adminToken = signToken({scope: ['admin']});
 
@@ -14,6 +15,7 @@ describe('/orders/{id}', () => {
   const checkout = new CheckoutBuilder().build();
 
   beforeEach(() => {
+    mockSuppliers.begin();
     return specRequest({
       url: '/checkouts',
       method: 'POST',
@@ -23,6 +25,10 @@ describe('/orders/{id}', () => {
     .then(response => {
       checkoutResponse = response;
     });
+  });
+
+  afterEach(() => {
+    mockSuppliers.end();
   });
 
   describe('get', () => {
