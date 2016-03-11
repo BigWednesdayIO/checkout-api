@@ -2,7 +2,7 @@
 
 class OrderFormBuilder {
   constructor() {
-    this.supplier_id = 'Pub Taverns';
+    this.supplier_id = '123456';
     this.line_items = [{
       product: {
         id: 'ABC123',
