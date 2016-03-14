@@ -5,6 +5,7 @@ const expect = require('chai').expect;
 const sinon = require('sinon');
 const CheckoutBuilder = require('./checkout_builder');
 const dataset = require('../lib/dataset');
+const mockSuppliers = require('./mock_suppliers');
 
 const checkouts = require('../lib/checkouts');
 
@@ -14,8 +15,8 @@ describe('Checkouts', () => {
   let sandbox;
   let checkout;
 
-  beforeEach(function () {
-    this.timeout(5000);
+  beforeEach(() => {
+    mockSuppliers.begin();
     sandbox = sinon.sandbox.create();
     insertSpy = sandbox.stub(dataset.constructor.super_.prototype, 'insert', _.noop);
     keySpy = sandbox.spy(dataset, 'key');
@@ -24,6 +25,7 @@ describe('Checkouts', () => {
   });
 
   afterEach(() => {
+    mockSuppliers.end();
     sandbox.restore();
   });
 

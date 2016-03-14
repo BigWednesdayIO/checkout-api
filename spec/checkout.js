@@ -6,6 +6,7 @@ const CheckoutBuilder = require('../test/checkout_builder');
 const signToken = require('./sign_jwt');
 const specRequest = require('./spec_request');
 const stripMetadata = require('./strip_metadata');
+const mockSuppliers = require('../test/mock_suppliers');
 
 const performCheckout = (checkoutPayload, token) => {
   return specRequest({
@@ -16,17 +17,25 @@ const performCheckout = (checkoutPayload, token) => {
   });
 };
 
-describe('/checkouts', function () {
-  this.timeout(5000);
-
+describe('/checkouts', () => {
   let checkoutResponse;
   const checkout = new CheckoutBuilder().build();
 
   before(() => {
+    mockSuppliers.begin();
     return performCheckout(checkout)
       .then(response => {
         checkoutResponse = response;
+        mockSuppliers.end();
       });
+  });
+
+  beforeEach(() => {
+    mockSuppliers.begin();
+  });
+
+  afterEach(() => {
+    mockSuppliers.end();
   });
 
   describe('post', () => {

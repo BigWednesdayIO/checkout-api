@@ -6,12 +6,11 @@ const CheckoutBuilder = require('../test/checkout_builder');
 const OrderFormBuilder = require('../test/order_form_builder');
 const signToken = require('./sign_jwt');
 const specRequest = require('./spec_request');
+const mockSuppliers = require('../test/mock_suppliers');
 
 const customerAToken = signToken({scope: ['customer:customer-a']});
 
-describe('/orders/{orderId}/order_forms/{id}/status', function () {
-  this.timeout(5000);
-
+describe('/orders/{orderId}/order_forms/{id}/status', () => {
   let checkout;
 
   beforeEach(() => {
@@ -19,6 +18,8 @@ describe('/orders/{orderId}/order_forms/{id}/status', function () {
       .withCustomerId('customer-a')
       .withOrderForms([new OrderFormBuilder().build()])
       .build();
+
+    mockSuppliers.begin();
 
     return specRequest({
       url: '/checkouts',
@@ -29,6 +30,10 @@ describe('/orders/{orderId}/order_forms/{id}/status', function () {
     .then(response => {
       checkout = response.result;
     });
+  });
+
+  afterEach(() => {
+    mockSuppliers.end();
   });
 
   describe('patch', () => {

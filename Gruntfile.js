@@ -11,18 +11,15 @@ module.exports = function (grunt) {
       target: ['<%= app %>', '<%= tests %>', '<%= specs %>']
     },
     mochaTest: {
+      options: {
+        reporter: 'spec',
+        clearRequireCache: false,
+        timeout: 20000
+      },
       test: {
-        options: {
-          reporter: 'spec',
-          clearRequireCache: false
-        },
         src: ['<%= tests %>']
       },
       spec: {
-        options: {
-          reporter: 'spec',
-          clearRequireCache: false
-        },
         src: ['<%= specs %>']
       }
     },

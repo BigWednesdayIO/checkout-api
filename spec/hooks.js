@@ -30,8 +30,7 @@ module.exports.deleteTestData = kind => {
   });
 };
 
-afterEach(function () {
-  this.timeout(5000);
+afterEach(() => {
   return Promise.all([
     module.exports.deleteTestData('Order'),
     module.exports.deleteTestData('OrderForm')
