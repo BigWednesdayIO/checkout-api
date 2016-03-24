@@ -1,0 +1,63 @@
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width: 960px; margin: 0 auto;">
+	<tbody>
+		<tr>
+			<td>
+				<h1>Delivery Note</h1>
+			</td>
+		</tr>
+
+		<tr>
+			<td style="padding: 0 0 20px">
+				<h2 style="margin: 15px 0;">Deliver to</h2>
+				<div>
+					{{#if delivery_address.name}}<div>{{delivery_address.name}}</div>{{/if}}
+					{{#if delivery_address.company}}<div>{{delivery_address.company}}</div>{{/if}}
+					{{#if delivery_address.line_1}}<div>{{delivery_address.line_1}}</div>{{/if}}
+					{{#if delivery_address.line_2}}<div>{{delivery_address.line_2}}</div>{{/if}}
+					{{#if delivery_address.line_3}}<div>{{delivery_address.line_3}}</div>{{/if}}
+					{{#if delivery_address.city}}<div>{{delivery_address.city}}</div>{{/if}}
+					{{#if delivery_address.region}}<div>{{delivery_address.region}}</div>{{/if}}
+					{{#if delivery_address.postcode}}<div>{{delivery_address.postcode}}</div>{{/if}}
+				</div>
+				<p>
+					<strong>Signature required:</strong>
+					<span>{{#if sign_for}}Yes{{else}}No{{/if}}</span>
+				</p>
+				<p>
+					<strong>Expected delivery date:</strong>
+					<span>{{date delivery_window.start}}</span>
+				</p>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				<table id="order-table" width="100%" cellpadding="5" cellspacing="0" border="1" style="border-collapse: collapse; border-width: 0;">
+					<thead>
+						<tr>
+							<th scope="col" align="left">Item</th>
+							<th scope="col" align="left">Description</th>
+							<th scope="col" align="right">Quantity</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#each line_items}}
+						<tr>
+							<td>{{product.sku}}</td>
+							<td>{{product.name}}</td>
+							<td align="right">{{quantity}}</td>
+						</tr>
+						{{/each}}
+					</tbody>
+				</table>
+			</td>
+		</tr>
+		{{#if delivery_note}}
+		<tr>
+			<td>
+				<p><strong>Notes:</strong> {{delivery_note}}</p>
+			</td>
+		</tr>
+		{{/if}}
+	</tbody>
+</table>
