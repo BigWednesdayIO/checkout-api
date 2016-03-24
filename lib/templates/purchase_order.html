@@ -26,15 +26,19 @@
 			<td width="50%" style="padding: 0 0 20px">
 				<h2 style="margin: 15px 0;">Vendor</h2>
 				<div>
-					{{#if order.billing_address.name}}<div>{{order.billing_address.name}}</div>{{/if}}
-					{{#if order.billing_address.company}}<div>{{order.billing_address.company}}</div>{{/if}}
-					{{#if order.billing_address.line_1}}<div>{{order.billing_address.line_1}}</div>{{/if}}
+					<div>{{order.billing_address.name}}</div>
+					<div>{{order.billing_address.company}}</div>
+					<div>{{order.billing_address.line_1}}</div>
 					{{#if order.billing_address.line_2}}<div>{{order.billing_address.line_2}}</div>{{/if}}
 					{{#if order.billing_address.line_3}}<div>{{order.billing_address.line_3}}</div>{{/if}}
 					{{#if order.billing_address.city}}<div>{{order.billing_address.city}}</div>{{/if}}
 					{{#if order.billing_address.region}}<div>{{order.billing_address.region}}</div>{{/if}}
-					{{#if order.billing_address.postcode}}<div>{{order.billing_address.postcode}}</div>{{/if}}
+					<div>{{order.billing_address.postcode}}</div>
 				</div>
+				<p>
+					<strong>Email address:</strong>
+					<span>{{order.billing_address.email}}</span>
+				</p>
 				{{#if membership.membership_number}}
 					<p>
 						<strong>Membership number:</strong>
@@ -54,6 +58,10 @@
 					{{#if order.delivery_address.region}}<div>{{order.delivery_address.region}}</div>{{/if}}
 					{{#if order.delivery_address.postcode}}<div>{{order.delivery_address.postcode}}</div>{{/if}}
 				</div>
+				<p>
+					<strong>Signature required:</strong>
+					<span>{{#if order.sign_for}}Yes{{else}}No{{/if}}</span>
+				</p>
 				<p>
 					<strong>Expected delivery date:</strong>
 					<span>{{date order.delivery_window.start}}</span>
@@ -118,5 +126,12 @@
 				</table>
 			</td>
 		</tr>
+		{{#if order.delivery_note}}
+		<tr>
+			<td colspan="2">
+				<p><strong>Notes:</strong> {{order.delivery_note}}</p>
+			</td>
+		</tr>
+		{{/if}}
 	</tbody>
 </table>

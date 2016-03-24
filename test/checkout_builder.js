@@ -33,6 +33,8 @@ class CheckoutBuilder {
       line_item_count: 1,
       order_forms: [{
         supplier_id: '123456',
+        sign_for: true,
+        delivery_note: 'This is a note',
         line_items: [{
           product: {
             id: 'ABC123',
