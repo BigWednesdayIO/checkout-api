@@ -84,7 +84,7 @@
 					</thead>
 					<tbody>
 						{{#each order.line_items}}
-						<tr ng-repeat="line_item in ::vm.order.line_items track by line_item.product.id">
+						<tr>
 							<td>{{product.sku}}</td>
 							<td>{{product.name}}</td>
 							<td align="right">{{quantity}}</td>
